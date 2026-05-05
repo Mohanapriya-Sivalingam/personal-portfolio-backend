@@ -1,13 +1,7 @@
-
 FROM eclipse-temurin:21-jdk-jammy
 
 WORKDIR /app
 
-COPY . .
+COPY target/portfolio-0.0.1-SNAPSHOT.jar app.jar
 
-# 🔥 IMPORTANT FIX
-RUN chmod +x mvnw
-
-RUN ./mvnw clean package -DskipTests
-
-CMD ["java", "-jar", "target/portfolio-0.0.1-SNAPSHOT.jar"]
+CMD ["java", "-jar", "app.jar"]
