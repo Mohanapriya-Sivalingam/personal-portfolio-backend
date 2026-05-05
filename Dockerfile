@@ -1,8 +1,12 @@
+
 FROM eclipse-temurin:21-jdk-jammy
 
 WORKDIR /app
 
 COPY . .
+
+# 🔥 IMPORTANT FIX
+RUN chmod +x mvnw
 
 RUN ./mvnw clean package -DskipTests
 
