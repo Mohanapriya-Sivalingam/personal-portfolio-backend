@@ -1,5 +1,4 @@
 
-
 package com.example.portfolio;
 
 import org.springframework.context.annotation.Bean;
@@ -25,22 +24,24 @@ public class SecurityConfig {
                 .cors(cors -> {}) // enable CORS
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/contactms/sendmessage").permitAll()
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
                 );
 
         return http.build();
     }
 
-    // 🔥 CORS CONFIG (IMPORTANT)
+    // 🔥 GLOBAL CORS CONFIG
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
+
         CorsConfiguration config = new CorsConfiguration();
 
         config.setAllowedOrigins(List.of(
-                "https://mohanapriyasivalingam.netlify.app"
+                "http://localhost:5173",   // local dev
+                "https://mohanapriyasivalingam.netlify.app" // deployed frontend
         ));
 
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);
 
