@@ -3,11 +3,14 @@ package com.example.portfolio.model;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 
 @Data
-
+@AllArgsConstructor
+@NoArgsConstructor
 public class Contact {
 
     @NotBlank(message = "Name is required")
@@ -21,4 +24,5 @@ public class Contact {
     @NotBlank(message = "Message cannot be empty.")
     @Size(min = 10, max = 500, message = "Message must be between 10 and 500 characters!.")
     String message;
+
 }

@@ -1,4 +1,5 @@
 
+
 package com.example.portfolio;
 
 import com.example.portfolio.model.Contact;
@@ -13,16 +14,20 @@ import org.springframework.web.bind.annotation.*;
 public class ContactController {
 
     @Autowired
-    private ContactService contactService;
+    private EmailService emailService;
 
     @PostMapping("/sendmessage")
-    public ResponseEntity<String> sendMessage(@Valid @RequestBody Contact contact) {
+    public ResponseEntity<String> contact(@Valid @RequestBody Contact contact) {  // ← FIXED: Use Contact model directly
         try {
-            String response = contactService.sendMessage(contact);
-            return ResponseEntity.ok(response);
+            emailService.sendContactEmail(
+                    contact.getName(),
+                    contact.getEmail(),
+                    contact.getMessage()
+            );
+            return ResponseEntity.ok("Message sent successfully!");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Failed to send message: " + e.getMessage());
+                    .body("Failed to send message. Please try again.");
         }
     }
 }

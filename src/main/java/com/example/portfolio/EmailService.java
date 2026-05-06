@@ -1,6 +1,8 @@
+
 package com.example.portfolio;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;   // ← FIXED: was lombok.Value (wrong!)
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -9,19 +11,25 @@ import org.springframework.stereotype.Service;
 public class EmailService {
 
     @Autowired
-    private JavaMailSender javaMailSender;
+    private JavaMailSender mailSender;
 
-public void sendEmail(String name, String email, String message){
-    SimpleMailMessage mail = new SimpleMailMessage();
+    @Value("${app.mail.to}")
+    private String mailTo;
 
-    mail.setTo("mohanapriyasivalingam@gmail.com");
-    mail.setSubject("From Portfolio: New Contact Form Message!");
-    mail.setText(
-            "Name : " + name + "\n" +
-            "Email : " + email + "\n" +
-                    "Message: " + message
-    );
-    javaMailSender.send(mail);
+    public void sendContactEmail(String name, String senderEmail, String message) {
+        try {
+            SimpleMailMessage mail = new SimpleMailMessage();
+            mail.setTo(mailTo);
+            mail.setSubject("Portfolio Contact from: " + name);
+            mail.setText(
+                    "Name: " + name + "\n" +
+                            "Email: " + senderEmail + "\n\n" +
+                            "Message:\n" + message
+            );
+            mail.setReplyTo(senderEmail);
+            mailSender.send(mail);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to send email: " + e.getMessage());
+        }
+    }
 }
-}
-
